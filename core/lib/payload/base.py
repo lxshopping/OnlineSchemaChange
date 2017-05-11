@@ -55,6 +55,8 @@ class Payload(object):
         self.socket = kwargs.get('socket', '')
         self.mysql_user = kwargs.get('mysql_user', '')
         self.mysql_pass = kwargs.get('mysql_password', '')
+        self.host = kwargs.get('mysql_host', '')
+        self.port = kwargs.get('mysql_port', '')
         self.charset = kwargs.get('charset', None)
         self.db_list = kwargs.get('database', [])
         self.mysql_engine = kwargs.get('mysql_engine', None)
@@ -89,8 +91,11 @@ class Payload(object):
         connection during the whole schema change
         """
         try:
+            # conn = db_lib.MySQLSocketConnection(
+            #     self.mysql_user, self.mysql_pass, self.socket, dbname,
+            #     connect_function=self.get_conn_func, charset=self.charset)
             conn = db_lib.MySQLSocketConnection(
-                self.mysql_user, self.mysql_pass, self.socket, dbname,
+                self.mysql_user, self.mysql_pass, self.socket, self.host, self.port, dbname,
                 connect_function=self.get_conn_func, charset=self.charset)
             if conn:
                 conn.connect()

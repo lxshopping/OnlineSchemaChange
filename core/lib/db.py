@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 
 
 def default_get_mysql_connection(
-        user_name, user_pass, socket, dbname='',
+        user_name, user_pass, socket, host, port, dbname='',
         timeout=60, connect_timeout=10, charset=None):
     """
     Default method for connection to a MySQL instance.
@@ -35,7 +35,9 @@ def default_get_mysql_connection(
     connection_config = {
         'user': user_name,
         'passwd': user_pass,
-        'unix_socket': socket,
+        # 'unix_socket': socket,
+        'host': host,
+        'port': port,
         'db': dbname,
         'use_unicode': True,
         'connect_timeout': connect_timeout
@@ -58,13 +60,15 @@ class MySQLSocketConnection:
     self.conn will contain the actual database handler.
     """
 
-    def __init__(self, user, password, socket, dbname='',
+    def __init__(self, user, password, socket, host, port, dbname='',
                  connect_timeout=10, connect_function=None, charset=None):
         self.user = user
         self.password = password
         self.db = dbname
         self.conn = None
         self.socket = socket
+        self.host = host
+        self.port = port
         self.connect_timeout = connect_timeout
         self.charset = charset
         # Cache the connection id, if the connection_id property is called.
@@ -86,7 +90,7 @@ class MySQLSocketConnection:
         @raise:
         """
         self.conn = self.connect_function(
-            self.user, self.password, self.socket, self.db,
+            self.user, self.password, self.socket, self.host, self.port, self.db,
             connect_timeout=self.connect_timeout, charset=self.charset)
 
     def disconnect(self):

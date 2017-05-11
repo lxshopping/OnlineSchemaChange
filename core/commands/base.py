@@ -88,6 +88,12 @@ class CommandBase(object):
                             help="Force script to run only on instances with "
                             "the replication role. ",
                             choices=['master', 'slave'])
+        parser.add_argument("--mysql-host",
+                            help="MySQL host to connect to the instance",
+                            required=require_user)
+        parser.add_argument("--mysql-port",
+                            help="MySQL port to connect to the instance",
+                            required=require_user)
         parser.add_argument("--mysql-user",
                             help="MySQL username to connect to the instance",
                             required=require_user)

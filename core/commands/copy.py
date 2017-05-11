@@ -203,6 +203,7 @@ class Copy(CommandBase):
                                {'filepath': filepath})
 
     def op(self, sudo=False):
+        print (self.get_conn_func is None)
         self.payload = CopyPayload(get_conn_func=self.get_conn_func,
                                    sudo=sudo,
                                    **vars(self.args))
