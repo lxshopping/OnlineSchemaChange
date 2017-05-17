@@ -396,6 +396,7 @@ class CopyPayload(Payload):
         """
         Parse the mysql_version string into a version object
         """
+        log.info("---------------- %s" % (self.mysql_vars['version'],))
         self.mysql_version = MySQLVersion(self.mysql_vars['version'])
 
     def is_var_enabled(self, var_name):
@@ -414,12 +415,17 @@ class CopyPayload(Payload):
         Otherwise slave will hit _chg table not exists error
         """
         # We only need to check this if RBR is enabled
+        log.info("mysql_vars: '{}'".format(self.mysql_vars['binlog_format']))
         if self.mysql_vars['binlog_format'] == 'ROW':
+            log.info("---------------------- %s" % (self.mysql_version.is_fb,))
             if self.mysql_version.is_fb:
-                if not self.is_var_enabled('sql_log_bin_triggers'):
+                log.info("mysql_version: '{}'".format(self.mysql_version.is_fb))
+                # if not self.is_var_enabled('sql_log_bin_triggers'):
+                if not self.is_var_enabled('sql_log_bin'):
                     return True
                 else:
                     return False
+                log.info("is_var_enabled : '{}'".format(self.is_var_enabled('sql_log_bin')))
             else:
                 return False
         else:
@@ -860,6 +866,7 @@ class CopyPayload(Payload):
         tmp_table_ddl = tmp_sql_obj.to_sql()
         log.info("Creating copy table using: {}".format(tmp_table_ddl))
         self.execute_sql(tmp_table_ddl)
+        time.sleep(10)
         table_diff = self.query(
             sql.column_diff,
             (self.new_table_name, self.table_name, self._current_db,))

@@ -35,7 +35,7 @@ def default_get_mysql_connection(
     connection_config = {
         'user': user_name,
         'passwd': user_pass,
-        # 'unix_socket': socket,
+        'unix_socket': socket,
         'host': host,
         'port': port,
         'db': dbname,
@@ -112,7 +112,8 @@ class MySQLSocketConnection:
         on instance, we usually don't want the changes to be populated through
         replication.
         """
-        self.conn.query("SET SESSION SQL_LOG_BIN=0;")
+        log.info("exe sql to close binlog")
+        # self.conn.query("SET SESSION SQL_LOG_BIN=0;")
 
     def affected_rows(self):
         """

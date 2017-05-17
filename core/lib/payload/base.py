@@ -55,6 +55,8 @@ class Payload(object):
         self.socket = kwargs.get('socket', '')
         self.mysql_user = kwargs.get('mysql_user', '')
         self.mysql_pass = kwargs.get('mysql_password', '')
+        # self.host = kwargs.get('host', '10.13.171.230')
+        # self.port = kwargs.get('port', 3306)
         self.host = kwargs.get('mysql_host', '')
         self.port = kwargs.get('mysql_port', '')
         self.charset = kwargs.get('charset', None)
@@ -248,7 +250,8 @@ class Payload(object):
         Set session sql_log_bin=OFF
         """
         try:
-            self._conn.set_no_binlog()
+            log.info("close binlog")
+            # self._conn.set_no_binlog()
         except MySQLdb.MySQLError as e:
             errcode, errmsg = e.args
             raise OSCError(
@@ -320,6 +323,7 @@ class Payload(object):
 
         # Test whether the replication role matches
         if self.repl_status:
+            log.info("given_role: '{}'".format(self.repl_status))
             if not self.check_replication_type():
                 raise OSCError('REPL_ROLE_MISMATCH',
                                {'given_role': self.repl_status})
