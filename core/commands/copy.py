@@ -197,7 +197,10 @@ class Copy(CommandBase):
                                {'dir': self.args.outfile_dir})
 
         # Ensure all the given ddl files are readable
+        log.info('----------------- %s' % (self.args.ddl_file_list,))
+        self.args.ddl_file_list = self.args.ddl_file_list[0].split(' ')
         for filepath in self.args.ddl_file_list:
+            log.info('----------------- %s' % (filepath,))
             if not util.is_file_readable(filepath):
                 raise OSCError('FAILED_TO_READ_DDL_FILE',
                                {'filepath': filepath})

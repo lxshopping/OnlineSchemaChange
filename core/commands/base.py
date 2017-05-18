@@ -90,10 +90,10 @@ class CommandBase(object):
                             choices=['master', 'slave'])
         parser.add_argument("--mysql-host",
                             help="MySQL host to connect to the instance",
-                            required=require_user)
+                            required=True)
         parser.add_argument("--mysql-port",
                             help="MySQL port to connect to the instance",
-                            required=require_user)
+                            required=True)
         parser.add_argument("--mysql-user",
                             help="MySQL username to connect to the instance",
                             required=require_user)

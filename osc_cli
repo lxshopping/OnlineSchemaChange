@@ -74,6 +74,10 @@ def main():
             cmd.subparser, require_user=True, require_password=True)
 
     args = parser.parse_args()
+    # args = parser.parse_args(''.split())
+    # log.info('-----------------%s' % (args))
+    print(args)
+
 
     # Setting up log handlers
     if isinstance(args.level, int):

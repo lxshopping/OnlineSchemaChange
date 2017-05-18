@@ -216,6 +216,7 @@ class Payload(object):
         necessary
         """
         for ddl_file in self.ddl_file_list:
+            log.info('------------------ %s' % (ddl_file,))
             with codecs.open(ddl_file, "r", "utf-8") as fh:
                 raw_sql = "\n".join([
                     line for line in fh.readlines()
