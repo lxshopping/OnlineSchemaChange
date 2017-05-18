@@ -59,7 +59,7 @@ class Payload(object):
         # self.port = kwargs.get('port', 3306)
         self.host = kwargs.get('mysql_host', '')
         self.port = kwargs.get('mysql_port', '')
-        self.charset = kwargs.get('charset', None)
+        self.charset = kwargs.get('charset', '')
         self.db_list = kwargs.get('database', [])
         self.mysql_engine = kwargs.get('mysql_engine', None)
         self.sudo = kwargs.get('sudo', False)
@@ -96,6 +96,7 @@ class Payload(object):
             # conn = db_lib.MySQLSocketConnection(
             #     self.mysql_user, self.mysql_pass, self.socket, dbname,
             #     connect_function=self.get_conn_func, charset=self.charset)
+            log.info('---------------user:%s---------host:%s---------port:%s--------' % (self.mysql_user,self.host,self.port))
             conn = db_lib.MySQLSocketConnection(
                 self.mysql_user, self.mysql_pass, self.socket, self.host, self.port, dbname,
                 connect_function=self.get_conn_func, charset=self.charset)
@@ -106,6 +107,7 @@ class Payload(object):
                                  .format(self.session_timeout))
                 return conn
         except MySQLdb.MySQLError as e:
+            # log.info('---------------user:%s---------host:%s---------port:%s--------' % (self.mysql_user,self.host,self.port))
             errcode, errmsg = e.args
             log.error("Error when connecting to MySQL [{}] {}"
                       .format(errcode, errmsg))

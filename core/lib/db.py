@@ -37,13 +37,14 @@ def default_get_mysql_connection(
         'passwd': user_pass,
         'unix_socket': socket,
         'host': host,
-        'port': port,
+        'port': int(port),
         'db': dbname,
         'use_unicode': True,
         'connect_timeout': connect_timeout
     }
     if charset:
         connection_config['charset'] = charset
+    log.info('---------------connection_config:%s-----port:%s' % (connection_config,type(port)))
     dbh = MySQLdb.Connect(**connection_config)
     dbh.autocommit(True)
     if timeout:
@@ -71,6 +72,9 @@ class MySQLSocketConnection:
         self.port = port
         self.connect_timeout = connect_timeout
         self.charset = charset
+
+        log.info('---------------user:%s---------host:%s---------port:%s--------' % (self.user,self.host,self.port))
+
         # Cache the connection id, if the connection_id property is called.
         self._connection_id = None
         if connect_function is not None:
