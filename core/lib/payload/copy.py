@@ -14,6 +14,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import glob
+import json
 import logging
 import os
 import MySQLdb
@@ -1652,6 +1653,7 @@ class CopyPayload(Payload):
         @type  new_table_checksum:  list of list
 
         """
+        log.info("len : %s - %s" % (len(old_table_checksum), len(new_table_checksum)))
         if len(old_table_checksum) != len(new_table_checksum):
             log.error("The total number of checksum chunks mismatch "
                       "OLD={}, NEW={}"
@@ -1663,6 +1665,8 @@ class CopyPayload(Payload):
 
         for idx, checksum_entry in enumerate(old_table_checksum):
             for col in checksum_entry:
+                log.info("check.....idx: %s, col: %s" % (idx, col))
+                log.info("checksum : %s - %s" % (old_table_checksum[idx][col], new_table_checksum[idx][col]))
                 if not old_table_checksum[idx][col] == \
                         new_table_checksum[idx][col]:
                     log.error(
@@ -1681,6 +1685,7 @@ class CopyPayload(Payload):
                         "Current replayed max(__OSC_ID) of chg table {}"
                         .format(self.last_replayed_id)
                     )
+                    # exit(1)
                     raise OSCError('CHECKSUM_MISMATCH')
 
     def checksum_full_table(self):
@@ -1771,6 +1776,7 @@ class CopyPayload(Payload):
             new_checksum = self.checksum_for_single_chunk(
                 self.new_table_name, use_where, new_idx_for_checksum)
             affected_rows = old_checksum['_osc_chunk_cnt']
+            log.info("values : %s - %s" % (old_checksum.values(), new_checksum.values()))
             if old_checksum.values() != new_checksum.values():
                 log.info(
                     "Checksum mismatch detected for chunk {}: "
@@ -1797,8 +1803,10 @@ class CopyPayload(Payload):
         # in select_table_into_outfile
         affected_rows = 1
         use_where = False
+        log.info("table_name: %s, new_table_name: %s" % (table_name, self.new_table_name))
         if table_name == self.new_table_name:
             idx_for_checksum = self.find_coverage_index()
+            log.info("1-------: %s", idx_for_checksum)
         else:
             idx_for_checksum = self._idx_name_for_filter
         while(affected_rows):
@@ -1810,12 +1818,15 @@ class CopyPayload(Payload):
                     self.select_chunk_size, use_where,
                     self.is_skip_fcache_supported,
                     idx_for_checksum))
+            log.info("1---checksum----: %s", checksum)
             # Refresh where condition range for next select
             if checksum:
                 self.refresh_range_start()
                 affected_rows = checksum[0]['cnt']
                 checksum_result.append(checksum[0])
+                log.info("2-----affect_rows: %s, sum0: %s", affected_rows, checksum[0])
                 use_where = True
+        log.info("------result: %s", json.dumps(checksum_result))
         return checksum_result
 
     def need_checksum(self):

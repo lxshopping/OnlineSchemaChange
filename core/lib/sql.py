@@ -13,6 +13,10 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 get_lock = 'SELECT get_lock(%s, 0) as lockstatus'
 release_lock = 'SELECT release_lock(%s) as lockstatus'
@@ -695,7 +699,7 @@ def checksum_by_chunk(
         no_fcache = "SQL_NO_FCACHE"
     else:
         no_fcache = ""
-    return (
+    result = (
         "SELECT {} count(*) as cnt, {} "
         "FROM ( "
         " SELECT * FROM `{}` FORCE INDEX (`{}`) {} "
@@ -704,6 +708,8 @@ def checksum_by_chunk(
                 escape(table_name), escape(force_index), where_clause,
                 list_to_col_str(pk_list), chunk_size)
     )
+    log.info("*****************************: %s" % (result,))
+    return result
 
 
 def checksum_by_replay_chunk(
