@@ -73,7 +73,7 @@ class MySQLSocketConnection:
         self.connect_timeout = connect_timeout
         self.charset = charset
 
-        log.info('---------------user:%s---------host:%s---------port:%s--------' % (self.user,self.host,self.port))
+        # log.info('---------------user:%s---------host:%s---------port:%s--------' % (self.user,self.host,self.port))
 
         # Cache the connection id, if the connection_id property is called.
         self._connection_id = None

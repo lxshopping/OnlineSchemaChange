@@ -76,7 +76,7 @@ def main():
     args = parser.parse_args()
     # args = parser.parse_args(''.split())
     # log.info('-----------------%s' % (args))
-    print(args)
+    # print(args)
 
 
     # Setting up log handlers

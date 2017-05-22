@@ -96,7 +96,7 @@ class Payload(object):
             # conn = db_lib.MySQLSocketConnection(
             #     self.mysql_user, self.mysql_pass, self.socket, dbname,
             #     connect_function=self.get_conn_func, charset=self.charset)
-            log.info('---------------user:%s---------host:%s---------port:%s--------' % (self.mysql_user,self.host,self.port))
+            # log.info('---------------user:%s---------host:%s---------port:%s--------' % (self.mysql_user,self.host,self.port))
             conn = db_lib.MySQLSocketConnection(
                 self.mysql_user, self.mysql_pass, self.socket, self.host, self.port, dbname,
                 connect_function=self.get_conn_func, charset=self.charset)
@@ -218,7 +218,7 @@ class Payload(object):
         necessary
         """
         for ddl_file in self.ddl_file_list:
-            log.info('------------------ %s' % (ddl_file,))
+            # log.info('------------------ %s' % (ddl_file,))
             with codecs.open(ddl_file, "r", "utf-8") as fh:
                 raw_sql = "\n".join([
                     line for line in fh.readlines()
